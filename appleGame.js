@@ -41,6 +41,7 @@ function agGameStart(){
     Player.Lives = 3;
     Player.Speed = 3;
     countDown = 3;
+    score = 0;
     newHighScore = false;
     gameCountDownScreen();
     let gameCountDown = setInterval(function(){
