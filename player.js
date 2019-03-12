@@ -17,7 +17,7 @@ var saveData = {
 var storedData = (JSON.parse(localStorage.getItem('cmykmgSaveData')));
 
 if(!storedData){
-    saveData();
+    saveGameData();
 } else{
     saveData = storedData;
 }

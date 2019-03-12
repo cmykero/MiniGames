@@ -20,7 +20,9 @@ var fallingSpeed = 3,
     countDown,
     endGameResponse = false,
     endGame = false,
-    playAgain = false;
+    playAgain = false,
+    newHighScore = false,
+    oldHighScore;
 
 
 function loadAppleGame(){
@@ -39,6 +41,7 @@ function agGameStart(){
     Player.Lives = 3;
     Player.Speed = 3;
     countDown = 3;
+    newHighScore = false;
     gameCountDownScreen();
     let gameCountDown = setInterval(function(){
         countDown--;
@@ -290,12 +293,17 @@ function gameOver(){
     for(i in objects){
         objects.pop(i);
     }
+    if(score>saveData.highScores["Apple Game"]){
+        oldHighScore = saveData.highScores["Apple Game"];
+        newHighScore = true;
+    }
     buttons.pop(backBtn);
     loadGameOverButtons();
     gameOverScreen();
 }
 
 function gameOverScreen(){
+    agSaveGame();
     if(endGameResponse === true){
         if(playAgain === true){
             loadAppleGame();
@@ -311,13 +319,19 @@ function gameOverScreen(){
     drawBackground();
     c.drawImage(gameOverSplashScreen, screenWidth/2-250,screenHeight/2-250, 500,500);
     requestAnimationFrame(gameOverScreen);
-
+    
     c.fillStyle = 'black';
     c.font = '30px Arial';
     c.textAlign='center';
     c.textBaseline='middle';
-    c.fillText(`Score: ${score}`,screenWidth/2,screenHeight/2-25);
-    c.fillText(`High Score: ${saveData.highScores["Apple Game"]}`,screenWidth/2,screenHeight/2+25);
+
+    if(newHighScore === true){
+        c.fillText(`New High Score: ${score}!!`,screenWidth/2,screenHeight/2-25);
+        c.fillText(`Old High Score: ${oldHighScore}`,screenWidth/2,screenHeight/2+25);
+    }else{
+        c.fillText(`Score: ${score}`,screenWidth/2,screenHeight/2-25);
+        c.fillText(`High Score: ${saveData.highScores["Apple Game"]}`,screenWidth/2,screenHeight/2+25);
+    }
 
     c.font = '18px Arial';
     c.fillText('Main Menu',295,535);
@@ -327,15 +341,11 @@ function gameOverScreen(){
 
 function unloadAppleGame(){
     unload = true;  // this turns off the request animation frame
-    agSaveGame();
 
     c.clearRect(0,0,screenWidth,screenHeight);
     window.removeEventListener('keydown', keyTracker, true);
     window.removeEventListener('keyup', keyTracker, true);
 
-    if(buttons['gameOverBackBtn']){
-        buttons.pop(gameOverBackBtn);
-    }
     score = 0;
     launchHomeScreen();
     
