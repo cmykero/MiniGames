@@ -26,7 +26,6 @@ var fallingSpeed = 3,
 
 
 function loadAppleGame(){
-    if(unload){unload=false}
     Player.Image.src = 'Assets/appleGame/basket.png';
 
     window.addEventListener('keydown', keyTracker, true);
@@ -37,10 +36,11 @@ function loadAppleGame(){
 }
 
 function agGameStart(){
+    if(unload){unload=false};
+    countDown = 3;
     lastSpawn = Date.now();
     Player.Lives = 3;
     Player.Speed = 3;
-    countDown = 3;
     score = 0;
     newHighScore = false;
     gameCountDownScreen();
@@ -169,7 +169,6 @@ function appleSpawner(){
             }
 
             if(Player.Lives === 0){
-                unload = true;
                 gameOver();
             }
         }
@@ -290,7 +289,7 @@ function agSaveGame(){
 }
 
 function gameOver(){
-    //ADD THE END GAME SCREEN
+    unload = true;
     for(i in objects){
         objects.pop(i);
     }
@@ -306,14 +305,14 @@ function gameOver(){
 function gameOverScreen(){
     agSaveGame();
     if(endGameResponse === true){
+        endGameResponse=false;
         if(playAgain === true){
-            loadAppleGame();
             playAgain = false;
+            return loadAppleGame();
         } else if(endGame === true){
             unloadAppleGame();
             endGame = false;
         }
-        endGameResponse=false;
         return;
     }
 
