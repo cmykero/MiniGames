@@ -38,8 +38,6 @@ var startBtn = {
         unload = false;
         initialClick = true;
         buttons.pop(startBtn);
-        // window.removeEventListener('click', clickHandler, true);  
-
     }
 }
 
@@ -71,8 +69,10 @@ function makesomethinghappen(e){
     nextRandomColor = randomColor;
 }
 function loadBallDropper(){
+    balls = [];
     unload = false;
     initialClick = false;
+    timeStamp = null;
     score = 0;
     buttons.push(startBtn);
     gameStartLoop();
@@ -102,7 +102,6 @@ function countDownTimer(){
     var countDown = 3;
     renderBackground();
     let countDownInterval = setInterval(function(){
-        // renderBackground();
         if(countDown === 3){
             c.fillStyle = 'red'
             c.beginPath();
@@ -142,7 +141,7 @@ function countDownTimer(){
 function gameTimer(){
     let timer = setInterval(function(){
         if(unload === true){
-            balls = [];
+            // balls = [];
             return clearInterval(timer)};
         gameCountDownTimer--;
         if(gameCountDownTimer === 0){
@@ -156,9 +155,10 @@ function gameTimer(){
 }
 
 function mainLoop(){
-    if(unload === true){return};
+    if(unload === true){return balls=[]};
     if(endGame === true){
         gameOver();
+        window.removeEventListener('click', makesomethinghappen);
     }
     renderBackground();
     renderGame(); //Draws the background and clears simultaneously.
@@ -168,8 +168,6 @@ function mainLoop(){
             c.fillStyle = 'black'
 
             var newClick = balls[i];
-            var newClickX = newClick[0]-25;
-            var newClickY = newClick[1]-25;
             var newClickVspeed = newClick[2];
             
             if(newClickVspeed < fallSpeed){

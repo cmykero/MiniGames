@@ -20,7 +20,13 @@ var storedData = (JSON.parse(localStorage.getItem('cmykmgSaveData')));
 if(!storedData){
     saveGameData();
 } else{
-    saveData = storedData;
+    if(!saveData.highScores['ball dropper']){
+        saveData.highScores['apple game'] = storedData.highScores['apple game'];
+        localStorage.removeItem('cmykmgSaveData');
+        saveGameData();
+    } else{
+        saveData = storedData;
+    }
 }
 
 function saveGameData(score){

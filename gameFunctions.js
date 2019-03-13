@@ -7,10 +7,11 @@ var countDown,
 function gameOver(){
     unload = true;
     objects = [];
+    // balls = [];
     if(score>saveData.highScores[currentGame]){
         oldHighScore = saveData.highScores[currentGame];
         newHighScore = true;
-        saveGameData(currentGame, score);
+        saveGameData();
     }
     gameOverSplashScreen.src = `Assets/${currentGame}/endScreen.png`
     buttons.pop(backBtn);
