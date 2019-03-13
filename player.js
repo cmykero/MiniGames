@@ -4,13 +4,14 @@ var Player = {
     Dimensions: [64,30],
     Position: 400,
     Image: new Image,
-    Keys: [],
     Lives: 0,
 }
 
 var saveData = {
     highScores:{
-        'Apple Game': 0,
+        'apple game': 0,
+        'space shooter': 0,
+        'ball dropper': 0
     }
 }
 
@@ -22,7 +23,14 @@ if(!storedData){
     saveData = storedData;
 }
 
-function saveGameData(){
+function saveGameData(score){
+    if(score){
+        if(score > saveData.highScores[currentGame]){
+            saveData.highScores[currentGame] = score;
+        }
+    }
+
+
     storeData = JSON.stringify(saveData)
     localStorage.setItem('cmykmgSaveData', storeData);
 }

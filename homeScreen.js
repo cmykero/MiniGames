@@ -4,15 +4,24 @@ var screenWidth = 800;
 var screenHeight = 750;
 canvas.width = screenWidth;
 canvas.height = screenHeight;
- 
-var unload=false;
+
+var unload=false,
+    offloadHS = false,
+    score = 0,
+    currentGame,
+    newHighScore = false,
+    oldHighScore;
 
 var appleGameImg = new Image();
-    appleGameImg.src = 'Assets/appleGame/appleGame.png'
+    appleGameImg.src = 'Assets/apple game/appleGame.png'
+var spaceShooterImg = new Image();
+    spaceShooterImg.src = 'Assets/space shooter/spaceShooterImg.png';
 
 var buttons = [];
+var games = [];
 
 var appleGame = {
+    name: 'apple game',
     points: [{
         x: 50,
         y: 250,
@@ -26,20 +35,92 @@ var appleGame = {
         x: 50,
         y: 500
     }],
-    name: 'apple game',
     interaction: function(){
+        currentGame = 'apple game';
+        Player.Image.src = 'Assets/apple game/basket.png';
+        gameLauncher();
+    },
+    launcher: function(){
         loadAppleGame();
-        buttons.pop(appleGame);
+    },
+    unloader: function(){
+        unloadAppleGame();
     }
 }
 
+var spaceShooter = {
+    name: 'space shooter',
+    points: [{
+        x: 300,
+        y: 250,
+    },{
+        x: 500,
+        y: 250
+    },{
+        x: 500,
+        y: 500
+    },{
+        x: 300,
+        y: 500
+    }],
+    interaction: function(){
+        currentGame = 'space shooter';
+        Player.Image.src = 'Assets/space shooter/spaceship.png';
+        alert('Coming Soon!!')
+        // gameLauncher();    
+    },
+    launcher: function(){
+        loadSpaceShooter();
+    },
+    unloader: function(){
+        unloadSpaceShooter();
+    }
+}
+
+var ballDropper = {
+    name: 'ball dropper',
+    points: [{
+        x: 550,
+        y: 250,
+    },{
+        x: 750,
+        y: 250
+    },{
+        x: 750,
+        y: 500
+    },{
+        x: 550,
+        y: 500
+    }],
+    interaction: function(){
+        currentGame = 'ball dropper';
+        gameLauncher();    
+    },
+    launcher: function(){
+        loadBallDropper();
+    },
+    unloader: function(){
+        unloadBallDropper();
+    }
+}
+
+games.push(appleGame);
+games.push(ballDropper);
+games.push(spaceShooter);
+
+function offloadHomeScreen(){
+//offload main menu buttons
+
+    buttons.pop(appleGame);
+    buttons.pop(spaceShooter);
+    buttons.pop(ballDropper);
+    offloadHS = true;
+}
 
 window.onload = function(){
     window.addEventListener('click', clickHandler, true);
     launchHomeScreen();
 }
-
-
 
 function define(button) {
     var points = button.points;
@@ -49,12 +130,19 @@ function define(button) {
         c.lineTo(points[i].x, points[i].y);
     }
 }
+
 function launchHomeScreen(){
+    if(offloadHS === true){offloadHS = false};
+    //Add homescreen buttons
     buttons.push(appleGame);
+    buttons.push(spaceShooter);
+    buttons.push(ballDropper);
     homeScreen();
 }
 
 function homeScreen(){
+    c.clearRect(0,0,screenWidth, screenHeight);
+    if(offloadHS === true){return;}
     // Draws the gradient background
     var grd = c.createLinearGradient(0, screenHeight/2, 0, 0);
     grd.addColorStop(0, "#7295b6");
@@ -63,11 +151,23 @@ function homeScreen(){
     c.fillRect(0, 0, screenWidth, screenHeight);
 
     //first row 
-    c.drawImage(appleGameImg, 50,250)
-    c.fillStyle ="grey"
-    c.fillRect(300,250, 200,200)
-    c.fillStyle ="grey"
-    c.fillRect(550,250, 200,200)
+    //Apple Game
+    c.drawImage(appleGameImg, 50,250);
+    //Space Shooter
+    c.drawImage(spaceShooterImg, 300,250, 200,200);
+    c.fillStyle = 'rgba(255, 255, 255, 0.52)';
+    c.fillRect(325, 370, 150, 50);
+    c.fillStyle = 'black';
+    c.font = '30px Arial';
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.fillText('Coming', screenWidth/2, 385);
+    c.fillText('soon!', screenWidth/2, 410);
+    //Ball Dropper
+    c.drawImage(gameTut1, 550,250, 200,200);
+
+    // c.fillStyle ="grey"
+    // c.fillRect(550,250, 200,200)
     //second row
     c.fillStyle ="grey"
     c.fillRect(50,500, 200, 200)
@@ -95,9 +195,7 @@ function clickHandler(e){
         if (c.isPointInPath(mouseX, mouseY)) {
             // if inside, display the shape's message
             // alert(button.message);
-            if(button.type = 'game'){
-                button.interaction();
-            }
+            button.interaction();
         }
     }
 };
@@ -105,4 +203,13 @@ function clickHandler(e){
 //randomizer
 function randomizer(min,max){ // min and max included
     return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function gameLauncher(){
+    for(i in games){
+        if(games[i].name === currentGame){
+            offloadHomeScreen();
+            games[i].launcher();
+        }
+    }
 }
