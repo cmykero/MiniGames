@@ -9,9 +9,10 @@ function gameOver(){
     objects = [];
     // balls = [];
     if(score>saveData.highScores[currentGame]){
+        console.log('test')
         oldHighScore = saveData.highScores[currentGame];
         newHighScore = true;
-        saveGameData();
+        saveGameData(score);
     }
     gameOverSplashScreen.src = `Assets/${currentGame}/endScreen.png`
     buttons.pop(backBtn);

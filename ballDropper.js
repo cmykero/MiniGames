@@ -44,15 +44,15 @@ var startBtn = {
 function trackMouse(e){
     if(timeStamp === null){
         timeStamp = Date.now();
-        lastMouseX = e.screenX;
-        lastMouseY = e.screenY
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY
     }
 
     var now = Date.now();
 
     timeStamp = now;
-    lastMouseX = e.screenX;
-    lastMouseY = e.screenY;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
 }
 
 function makesomethinghappen(e){ 
@@ -277,7 +277,7 @@ function renderGame(){
 
     c.fillStyle = nextRandomColor;
     c.beginPath();
-    c.arc(lastMouseX+20, lastMouseY-120, 10,0,Math.PI*2);
+    c.arc(lastMouseX+40, lastMouseY-20, 10,0,Math.PI*2);
     c.closePath();
     c.fill();
 }
